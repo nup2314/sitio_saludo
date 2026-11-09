@@ -1,0 +1,123 @@
+/* Hoja de estilo morada */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #e6d9f5;
+  margin: 0;
+  padding: 40px 15px;
+}
+
+.caja {
+  background-color: white;
+  border: 3px solid #6a1b9a;
+  border-radius: 8px;
+  max-width: 380px;
+  margin: 0 auto;
+  padding: 25px;
+}
+
+h2 {
+  color: #6a1b9a;
+  text-align: center;
+}
+
+input {
+  border: 2px solid #9c4dcc;
+  border-radius: 4px;
+  padding: 6px;
+  width: 95%;
+  margin-top: 4px;
+}
+
+input:focus {
+  outline: none;
+  border-color: #4a148c;
+}
+
+button {
+  background-color: #6a1b9a;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 14px;
+  margin-top: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #4a148c;
+}
+
+/* Imagen de la pantalla de bienvenida: se ve completa, sin recortarse */
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 15px auto;
+}
+
+/* ===== ANIMACIONES ===== */
+
+/* Cada pantalla aparece suavemente al mostrarse */
+.caja {
+  animation: aparecer 0.6s ease;
+}
+
+@keyframes aparecer {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Los botones crecen un poquito al pasar el cursor */
+button {
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+button:hover {
+  transform: scale(1.05);
+}
+
+button:active {
+  transform: scale(0.95);
+}
+
+/* Los campos cambian de color suavemente */
+input {
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+input:focus {
+  box-shadow: 0 0 8px #9c4dcc;
+}
+
+/* El mensaje de error tiembla */
+.temblar {
+  animation: temblar 0.4s;
+}
+
+@keyframes temblar {
+  0%, 100% { transform: translateX(0); }
+  25%      { transform: translateX(-8px); }
+  50%      { transform: translateX(8px); }
+  75%      { transform: translateX(-8px); }
+}
+
+/* La imagen de bienvenida aparece con zoom */
+img {
+  animation: zoom 0.8s ease;
+}
+
+@keyframes zoom {
+  from { opacity: 0; transform: scale(0.5); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* El título de bienvenida rebota al aparecer */
+#textoBienvenida {
+  animation: rebote 0.8s ease;
+}
+
+@keyframes rebote {
+  0%   { transform: translateY(-30px); opacity: 0; }
+  60%  { transform: translateY(8px); opacity: 1; }
+  100% { transform: translateY(0); }
+}

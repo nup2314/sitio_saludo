@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Login</title>
+  <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+
+  <!-- PANTALLA 1: LOGIN -->
+  <div id="pantallaLogin" class="caja">
+    <h2>Login</h2>
+    Usuario: <input type="text" id="loginUsuario"><br><br>
+    Contraseña: <input type="password" id="loginPass"><br><br>
+    <button onclick="iniciarSesion()">Acceder</button>
+    <button onclick="mostrar('pantallaAlta')">¿Eres nuevo usuario? Regístrate</button>
+    <p id="loginError" style="color:red;"></p>
+  </div>
+
+  <!-- PANTALLA 2: ALTA DE USUARIO -->
+  <div id="pantallaAlta" class="caja" style="display:none;">
+    <h2>Alta usuario</h2>
+    Nombre usuario: <input type="text" id="altaUsuario"><br><br>
+    Correo: <input type="email" id="altaCorreo"><br><br>
+    Contraseña: <input type="password" id="altaPass"><br><br>
+    <button onclick="agregarUsuario()">Agregar usuario</button>
+    <button onclick="mostrar('pantallaLogin')">Volver</button>
+    <p id="altaMensaje"></p>
+  </div>
+
+  <!-- PANTALLA 3: BIENVENIDA -->
+  <div id="pantallaBienvenida" class="caja" style="display:none;">
+    <h2 id="textoBienvenida"></h2>
+    <!-- Cambia el valor de src por la dirección (URL) de tu imagen de la web -->
+    <img src="https://imgs.search.brave.com/-78AuqGnk79T2r_Bz6EGuUnAHxXoeYlmoYpyTH6z7cs/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly90aHVt/Yi53aWtpbWVkaWEu/b3JnL3dpa2lwZWRp/YS9jb21tb25zL3Ro/dW1iLzEvMTIvRnVs/bF9pbWFnZV9vZl9U/dW5nX1R1bmdfVHVu/Z19TYWh1ci5wbmcv/MjUwcHgtRnVsbF9p/bWFnZV9vZl9UdW5n/X1R1bmdfVHVuZ19T/YWh1ci5wbmc_dXRt/X3NvdXJjZT1lbi53/aWtpcGVkaWEub3Jn/JnV0bV9jYW1wYWln/bj1wYXJzZXImdXRt/X2NvbnRlbnQ9dGh1/bWJuYWls" alt="Imagen de bienvenida">
+    <button onclick="cerrarSesion()">Cerrar sesión</button>
+  </div>
+
+  <script>
+    // "Base de datos": lista de usuarios guardada en el navegador
+    function obtenerUsuarios() {
+      return JSON.parse(localStorage.getItem("usuarios")) || [];
+    }
+
+    function guardarUsuarios(lista) {
+      localStorage.setItem("usuarios", JSON.stringify(lista));
+    }
+
+    // Muestra una pantalla y oculta las demás
+    function mostrar(id) {
+      document.getElementById("pantallaLogin").style.display = "none";
+      document.getElementById("pantallaAlta").style.display = "none";
+      document.getElementById("pantallaBienvenida").style.display = "none";
+      document.getElementById(id).style.display = "block";
+    }
+
+    // Iniciar sesión
+    function iniciarSesion() {
+      var usuario = document.getElementById("loginUsuario").value;
+      var pass = document.getElementById("loginPass").value;
+      var usuarios = obtenerUsuarios();
+      var encontrado = null;
+
+      for (var i = 0; i < usuarios.length; i++) {
+        if (usuarios[i].nombre === usuario && usuarios[i].pass === pass) {
+          encontrado = usuarios[i];
+        }
+      }
+
+      if (encontrado) {
+        document.getElementById("loginError").innerText = "";
+        document.getElementById("textoBienvenida").innerText = "Bienvenido(a) " + encontrado.nombre;
+        mostrar("pantallaBienvenida");
+      } else {
+        var error = document.getElementById("loginError");
+        error.innerText = "Error: la cuenta no existe o los datos son incorrectos.";
+        // Reinicia la animación de temblor cada vez que hay error
+        error.classList.remove("temblar");
+        void error.offsetWidth;
+        error.classList.add("temblar");
+      }
+    }
+
+    // Dar de alta un usuario
+    function agregarUsuario() {
+      var nombre = document.getElementById("altaUsuario").value;
+      var correo = document.getElementById("altaCorreo").value;
+      var pass = document.getElementById("altaPass").value;
+      var mensaje = document.getElementById("altaMensaje");
+
+      if (nombre === "" || correo === "" || pass === "") {
+        mensaje.style.color = "red";
+        mensaje.innerText = "Llena todos los campos.";
+        return;
+      }
+
+      var usuarios = obtenerUsuarios();
+
+      for (var i = 0; i < usuarios.length; i++) {
+        if (usuarios[i].nombre === nombre) {
+          mensaje.style.color = "red";
+          mensaje.innerText = "Ese usuario ya existe.";
+          return;
+        }
+      }
+
+      usuarios.push({ nombre: nombre, correo: correo, pass: pass });
+      guardarUsuarios(usuarios);
+
+      document.getElementById("altaUsuario").value = "";
+      document.getElementById("altaCorreo").value = "";
+      document.getElementById("altaPass").value = "";
+      mensaje.style.color = "green";
+      mensaje.innerText = "Usuario agregado. Ya puedes iniciar sesión.";
+    }
+
+    // Cerrar sesión
+    function cerrarSesion() {
+      document.getElementById("loginUsuario").value = "";
+      document.getElementById("loginPass").value = "";
+      mostrar("pantallaLogin");
+    }
+  </script>
+
+</body>
+</html>
